@@ -2,14 +2,20 @@
   "name": "npm-typescript-template",
   "version": "1.0.0",
   "description": "npm typescript template",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "npm-run-all --sequential build:**",
     "build:tsc": "tsc",
     "build:remove-test-from-lib": "rimraf ./lib/__tests__",
     "test": "jest --config jestconfig.json",
     "format": "prettier --write 'src/**/*.ts' 'src/**/*.js'",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "prepare" : "npm run build",
+    "prepublishOnly" : "npm test && npm run lint",
+    "perversion" : "npm run lint",
+    "version" : "npm run format"
+
   },
   "repository": {
     "type": "git"
