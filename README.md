@@ -14,4 +14,6 @@ This is only if you don't want to go to public npm registry or for testing befor
 
 Kudos to [Carl-Johan Kihl](https://itnext.io/@carljohan.kihl) as I followed these suggestions - [step-by-step-building-and-publishing-an-npm-typescript-package](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c).
 
+[publish-to-npm](https://zellwk.com/blog/publish-to-npm/)
+
 
