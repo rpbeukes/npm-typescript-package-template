@@ -16,7 +16,7 @@
     "perversion": "npm run lint",
     "version": "npm run format",
     "pack": "npm pack",
-    "unpack": "tar -xzvf *.tgz"
+    "unpack": "rimraf ./package && tar -xzvf *.tgz"
   },
   "repository": {
     "type": "git"
