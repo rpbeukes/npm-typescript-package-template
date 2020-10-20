@@ -22,8 +22,8 @@ jobs:
           # Let the bot delete the merged branch. true or false.
           auto-delete: true
         if: github.actor == 'rpbeukes-bot'
-          env:
-            GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
       #  - name: auto merge
       #   # Custom action for auto merging already available on marketplace
