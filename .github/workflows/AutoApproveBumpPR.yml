@@ -5,10 +5,15 @@ on:
     branches: [master]
 
 jobs:
-  auto-approve:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: hmarr/auto-approve-action@v2.0.0
-        if: github.actor == 'rpbeukes-bot'
-        with:
-          github-token: '${{ secrets.BOT_PAT }}'
+    auto-merge:
+        runs-on: ubuntu-latest
+        steps:
+            - name: auto merge
+            # Custom action for auto merging already available on marketplace
+            uses: pascalgn/automerge-action@v0.12.0
+            # Perform the auto merge action only when the PR is raised by the bot
+            if: github.actor == 'rpbeukes-bot'
+            env:
+                GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+                MERGE_METHOD: squash
+                UPDATE_METHOD: "rebase"
