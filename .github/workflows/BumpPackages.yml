@@ -19,11 +19,14 @@ jobs:
         run: sudo npm install -g npm-check-updates
 
       - uses: actions/checkout@v2
+        name: checkout master
+        with:
+          ref: master
 
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
 
-      - name: create and checkout ${BRANCH_NAME} branch
+      - name: create and checkout bump branch
         run: git branch $BRANCH_NAME && git checkout $BRANCH_NAME
 
       - name: add package.json package-lock.json changes
