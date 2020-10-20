@@ -12,8 +12,8 @@ jobs:
     steps:
       # share the variables with steps below
       - name: set BRANCH_NAME environment variable
-      run: |
-        echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
+        run: |
+          echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
 
       - name: install npm-check-updates (ncu)
         run: npm install -g npm-check-updates
@@ -28,8 +28,8 @@ jobs:
 
       - name: add package.json package-lock.json changes
         run: |
-        git status
-        git add package.json package-lock.json
+          git status
+          git add package.json package-lock.json
 
       - name: set 'rpbeukes-bot' as the git user
         run: |
