@@ -23,7 +23,7 @@ jobs:
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
 
-      - name: create and checkout ${{ BRANCH_NAME }} branch
+      - name: create and checkout ${BRANCH_NAME} branch
         run: git branch $BRANCH_NAME && git checkout $BRANCH_NAME
 
       - name: add package.json package-lock.json changes
