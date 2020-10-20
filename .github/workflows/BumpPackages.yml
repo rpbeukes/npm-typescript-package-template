@@ -16,9 +16,7 @@ jobs:
           echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
 
       - name: install npm-check-updates (ncu)
-        run: npm install -g npm-check-updates
-        env:
-          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+        run: sudo npm install -g npm-check-updates
 
       - uses: actions/checkout@v2
 
