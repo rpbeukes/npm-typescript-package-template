@@ -47,7 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
-      - name: get list of pending PRs and search for a rpbeukes-bot PR
+      - name: create PR 'bump all packages (rpbeukes-bot)'
         run: |
           hub pull-request -m "bump all packages (rpbeukes-bot)"
         env:
