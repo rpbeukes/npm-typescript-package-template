@@ -2,7 +2,7 @@ name: bump-packages
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   create-bump-PR:
@@ -17,6 +17,8 @@ jobs:
 
       - name: install npm-check-updates (ncu)
         run: npm install -g npm-check-updates
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
       - uses: actions/checkout@v2
 
