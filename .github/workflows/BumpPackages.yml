@@ -1,0 +1,51 @@
+name: bump-packages
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  create-bump-PR:
+    name: create-bump-PR
+    runs-on: ubuntu-latest
+
+    steps:
+      # share the variables with steps below
+      - name: set BRANCH_NAME environment variable
+        run: |
+          echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
+
+      - name: install npm-check-updates (ncu)
+        run: sudo npm install -g npm-check-updates
+
+      - uses: actions/checkout@v2
+
+      - name: update packages with npm-check-updates
+        run: ncu --doctor --upgrade
+
+      - name: create and checkout ${BRANCH_NAME} branch
+        run: git branch $BRANCH_NAME && git checkout $BRANCH_NAME
+
+      - name: add package.json package-lock.json changes
+        run: |
+          git status
+          git add package.json package-lock.json
+
+      - name: set 'rpbeukes-bot' as the git user
+        run: |
+          git config --local user.email "ruancoder+bot@gmail.com"
+          git config --local user.name "rpbeukes-bot"
+
+      - name: add commit message
+        run: git commit -m "bump package versions to latest"
+
+      - name: push branch
+        run: git push --set-upstream origin $BRANCH_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+
+      - name: get list of pending PRs and search for a rpbeukes-bot PR
+        run: |
+          hub pull-request -m "bump all packages (rpbeukes-bot)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
