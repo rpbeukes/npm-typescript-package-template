@@ -25,7 +25,7 @@ jobs:
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
 
-      - name: create and checkout $BRANCH_NAME branch
+      - name: create and checkout ${{ BRANCH_NAME }} branch
         run: git branch $BRANCH_NAME && git checkout $BRANCH_NAME
 
       - name: add package.json package-lock.json changes
@@ -42,7 +42,7 @@ jobs:
         run: git commit -m "bump package versions to latest"
 
       - name: push branch
-        run: git push --set-upstream origin
+        run: git push --set-upstream origin $BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
