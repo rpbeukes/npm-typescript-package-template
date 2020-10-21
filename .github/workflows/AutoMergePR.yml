@@ -2,7 +2,7 @@ name: auto-merge
 
 on:
   pull_request:
-    branches: [master]
+    branches: [auto-merge-test] # wil become master
 
 jobs:
   auto-merge:
@@ -13,8 +13,9 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      # - name: auto merge
-      #   uses: plm9606/automerge_actions@1.2.2
+      #  - name: auto merge
+      #   # Custom action for auto merging already available on marketplace
+      #   uses: pascalgn/automerge-action@v0.12.0
       #   with:
       #     reviewers-number: 0
       #     # The merge method ("merge", "squash", "rebase"). Default is "merge"

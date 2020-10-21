@@ -2,26 +2,29 @@ name: bump-packages
 
 on:
   pull_request:
-    branches: [master]
+    branches: [auto-merge-test] # wil become master
 
 jobs:
   create-bump-PR:
     name: create-bump-PR
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: bump-packages-test # will become bump-packages
+      BRANCH_CHECKOUT_NAME: auto-merge-test # wil become master
 
     steps:
-      # share the variables with steps below
-      - name: set BRANCH_NAME environment variable
-        run: |
-          echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
+      # # share the variables with steps below
+      # - name: set BRANCH_NAME environment variable
+      #   run: |
+      #     echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
 
       - name: install npm-check-updates (ncu)
         run: sudo npm install -g npm-check-updates
 
       - uses: actions/checkout@v2
-        name: checkout master
+        name: checkout branch to raise a PR against
         with:
-          ref: master
+          ref: ${{ env.BRANCH_CHECKOUT_NAME }}
 
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
