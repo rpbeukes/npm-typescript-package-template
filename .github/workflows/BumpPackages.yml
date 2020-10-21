@@ -61,7 +61,8 @@ jobs:
         if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: git commit -m "$GIT_COMMIT_MESSAGE"
 
-      - name: push branch `$BUMP_BRANCH_NAME`
+      - name: push branch ${{env.BUMP_BRANCH_NAME}}
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: git push --set-upstream origin $BUMP_BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
