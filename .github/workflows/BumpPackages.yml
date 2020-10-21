@@ -8,20 +8,23 @@ jobs:
   create-bump-PR:
     name: create-bump-PR
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: bump-packages
+      BRANCH_CHECKOUT_NAME: auto-merge-test
 
     steps:
-      # share the variables with steps below
-      - name: set BRANCH_NAME environment variable
-        run: |
-          echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
+      # # share the variables with steps below
+      # - name: set BRANCH_NAME environment variable
+      #   run: |
+      #     echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
 
       - name: install npm-check-updates (ncu)
         run: sudo npm install -g npm-check-updates
 
       - uses: actions/checkout@v2
-        name: checkout master
+        name: checkout $BRANCH_CHECKOUT_NAME
         with:
-          ref: master
+          ref: $BRANCH_CHECKOUT_NAME
 
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
