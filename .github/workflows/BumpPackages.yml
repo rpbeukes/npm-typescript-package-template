@@ -13,6 +13,7 @@ jobs:
       MASTER_BRANCH_NAME: auto-merge-test # wil become master
       GIT_COMMIT_MESSAGE: bump package versions to latest.
       PR_TITLE: TEST - bump all packages (rpbeukes-bot)
+      IS_BUMP_NEEDED: false
 
     steps:
       # # share the variables with steps below
@@ -31,20 +32,30 @@ jobs:
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
 
+      - name: set IS_BUMP_NEEDED to output of 'git status | grep "package.json"'
+        run: echo "IS_BUMP_NEEDED=`git status | grep "package.json"`" >> $GITHUB_ENV
+
+      - name: set IS_BUMP_NEEDED
+        if: contains($IS_BUMP_NEEDED, 'package.json')
+        run: echo "IS_BUMP_NEEDED=true >> $GITHUB_ENV
+
       - name: create and checkout bump branch
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: git branch $BUMP_BRANCH_NAME && git checkout $BUMP_BRANCH_NAME
 
       - name: add package.json package-lock.json changes
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: |
-          git status
           git add package.json package-lock.json
 
       - name: set 'rpbeukes-bot' as the git user
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: |
           git config --local user.email "ruancoder+bot@gmail.com"
           git config --local user.name "rpbeukes-bot"
 
       - name: add commit message
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: git commit -m "$GIT_COMMIT_MESSAGE"
 
       - name: push branch `$BUMP_BRANCH_NAME`
@@ -53,6 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
       - name: create PR 'bump all packages (rpbeukes-bot)'
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: |
           hub pull-request --base $MASTER_BRANCH_NAME -m "$PR_TITLE"
         env:
