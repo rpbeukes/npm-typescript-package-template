@@ -69,6 +69,6 @@ jobs:
       - name: create PR 'bump all packages (rpbeukes-bot)'
         if: ${{env.IS_BUMP_NEEDED == 'true'}}
         run: |
-          hub pull-request --base $MASTER_BRANCH_NAME -m "$PR_TITLE"
+          hub pull-request --base $MASTER_BRANCH_NAME --message "$PR_TITLE" --labels automerge
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
