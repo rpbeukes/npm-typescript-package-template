@@ -17,19 +17,6 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      #  - name: auto merge
-      #   # Custom action for auto merging already available on marketplace
-      #   uses: pascalgn/automerge-action@v0.12.0
-      #   with:
-      #     reviewers-number: 0
-      #     # The merge method ("merge", "squash", "rebase"). Default is "merge"
-      #     merge-method: squash
-      #     # Let the bot delete the merged branch. true or false.
-      #     auto-delete: true
-      #   if: github.actor == 'rpbeukes-bot'
-      #     env:
-      #       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
-
       # - name: print github.actor
       #   if: ${{github.actor == env.BOT_NAME}}
       #   run: |
@@ -49,11 +36,24 @@ jobs:
         # Custom action for auto merging already available on marketplace
         uses: pascalgn/automerge-action@v0.12.0
         with:
-          args: '--trace'
-        # Perform the auto merge action only when the PR is raised by the bot
+          reviewers-number: 0
+          # The merge method ("merge", "squash", "rebase"). Default is "merge"
+          merge-method: squash
+          # Let the bot delete the merged branch. true or false.
+          auto-delete: false
         if: ${{github.actor == env.BOT_NAME && github.head_ref == env.BRANCH_TO_MERGE}}
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
-          MERGE_LABELS: 'automerge'
-          MERGE_METHOD: squash
-          UPDATE_METHOD: 'rebase'
+
+      # - name: auto merge
+      #   # Custom action for auto merging already available on marketplace
+      #   uses: pascalgn/automerge-action@v0.12.0
+      #   with:
+      #     args: '--trace'
+      #   # Perform the auto merge action only when the PR is raised by the bot
+      #   if: ${{github.actor == env.BOT_NAME && github.head_ref == env.BRANCH_TO_MERGE}}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+      #     MERGE_LABELS: 'automerge'
+      #     MERGE_METHOD: squash
+      #     UPDATE_METHOD: 'rebase'
