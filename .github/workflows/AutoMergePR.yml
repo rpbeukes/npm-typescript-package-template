@@ -30,29 +30,29 @@ jobs:
       #     env:
       #       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
-      - name: print github.actor
-        if: ${{github.actor == env.BOT_NAME}}
-        run: |
-          echo ${{github.actor}}
+      # - name: print github.actor
+      #   if: ${{github.actor == env.BOT_NAME}}
+      #   run: |
+      #     echo ${{github.actor}}
 
-      - name: print github.head_ref
-        if: ${{github.head_ref == env.BRANCH_TO_MERGE}}
-        run: |
-          echo ${{github.head_ref}}
+      # - name: print github.head_ref
+      #   if: ${{github.head_ref == env.BRANCH_TO_MERGE}}
+      #   run: |
+      #     echo ${{github.head_ref}}
 
-      - name: print github.head_ref
+      # - name: print github.head_ref
+      #   if: ${{github.actor == env.BOT_NAME && github.head_ref == env.BRANCH_TO_MERGE}}
+      #   run: |
+      #     echo ${{github.actor}} ${{github.head_ref}}
+
+      - name: auto merge
+        # Custom action for auto merging already available on marketplace
+        uses: pascalgn/automerge-action@v0.12.0
+        with:
+          args: '--trace'
+        # Perform the auto merge action only when the PR is raised by the bot
         if: ${{github.actor == env.BOT_NAME && github.head_ref == env.BRANCH_TO_MERGE}}
-        run: |
-          echo ${{github.actor}} ${{github.head_ref}}
-
-      # - name: auto merge
-      #   # Custom action for auto merging already available on marketplace
-      #   uses: pascalgn/automerge-action@v0.12.0
-      #   with:
-      #     args: '--trace'
-      #   # Perform the auto merge action only when the PR is raised by the bot
-      #   if: github.actor == 'rpbeukes-bot'
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
-      #     MERGE_METHOD: squash
-      #     UPDATE_METHOD: 'rebase'
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+          MERGE_METHOD: squash
+          UPDATE_METHOD: 'rebase'
