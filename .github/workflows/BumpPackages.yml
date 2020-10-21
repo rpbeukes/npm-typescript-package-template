@@ -2,15 +2,15 @@ name: bump-packages
 
 on:
   pull_request:
-    branches: [master]
+    branches: [auto-merge-test] # wil become master
 
 jobs:
   create-bump-PR:
     name: create-bump-PR
     runs-on: ubuntu-latest
     env:
-      BRANCH_NAME: bump-packages
-      BRANCH_CHECKOUT_NAME: auto-merge-test
+      BRANCH_NAME: bump-packages-test # will become bump-packages
+      BRANCH_CHECKOUT_NAME: auto-merge-test # wil become master
 
     steps:
       # # share the variables with steps below
