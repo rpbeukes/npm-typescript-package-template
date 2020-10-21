@@ -7,6 +7,9 @@ on:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
+    env:
+      BRANCH_TO_MERGE: bump-packages-test # will become bump-packages
+
     steps:
       - name: Dump GitHub context
         env:
@@ -29,17 +32,11 @@ jobs:
       - name: print github.actor
         if: github.actor == 'rpbeukes-bot'
         run: |
-          echo `github.actor`
-          echo github.actor
-          echo $github.actor
           echo ${{github.actor}}
 
       - name: print github.head_ref
-        if: github.head_ref == 'auto-bump-versions'
+        if: ${{github.head_ref == env.BRANCH_TO_MERGE}}
         run: |
-          echo `github.head_ref`
-          echo github.head_ref
-          echo $github.head_ref
           echo ${{github.head_ref}}
 
       # - name: auto merge
