@@ -2,7 +2,7 @@ name: bump-packages
 
 on:
   pull_request:
-    branches: [auto-merge-test] # wil become master
+    branches: [master] # wil become master
 
 jobs:
   create-bump-PR:
