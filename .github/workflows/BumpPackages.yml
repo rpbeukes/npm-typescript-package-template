@@ -9,16 +9,16 @@ jobs:
     name: create-bump-PR
     runs-on: ubuntu-latest
     env:
-      BRANCH_NAME: bump-packages-test # will become bump-packages
-      BRANCH_CHECKOUT_NAME: auto-merge-test # wil become master
-      PR_TITLE: bump all packages (rpbeukes-bot)
+      BUMP_BRANCH_NAME: bump-packages-test # will become bump-packages
+      MASTER_BRANCH_NAME: auto-merge-test # wil become master
       GIT_COMMIT_MESSAGE: bump package versions to latest.
+      PR_TITLE: TEST - bump all packages (rpbeukes-bot)
 
     steps:
       # # share the variables with steps below
-      # - name: set BRANCH_NAME environment variable
+      # - name: set BUMP_BRANCH_NAME environment variable
       #   run: |
-      #     echo "BRANCH_NAME=bump-packages" >> $GITHUB_ENV
+      #     echo "BUMP_BRANCH_NAME=bump-packages" >> $GITHUB_ENV
 
       - name: install npm-check-updates (ncu)
         run: sudo npm install -g npm-check-updates
@@ -26,13 +26,13 @@ jobs:
       - uses: actions/checkout@v2
         name: checkout branch to raise a PR against
         with:
-          ref: ${{ env.BRANCH_CHECKOUT_NAME }}
+          ref: ${{ env.MASTER_BRANCH_NAME }}
 
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
 
       - name: create and checkout bump branch
-        run: git branch $BRANCH_NAME && git checkout $BRANCH_NAME
+        run: git branch $BUMP_BRANCH_NAME && git checkout $BUMP_BRANCH_NAME
 
       - name: add package.json package-lock.json changes
         run: |
@@ -47,13 +47,13 @@ jobs:
       - name: add commit message
         run: git commit -m "$GIT_COMMIT_MESSAGE"
 
-      - name: push branch `$BRANCH_NAME`
-        run: git push --set-upstream origin $BRANCH_NAME
+      - name: push branch `$BUMP_BRANCH_NAME`
+        run: git push --set-upstream origin $BUMP_BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
       - name: create PR 'bump all packages (rpbeukes-bot)'
         run: |
-          hub pull-request --base $BRANCH_CHECKOUT_NAME -m "$PR_TITLE"
+          hub pull-request --base $MASTER_BRANCH_NAME -m "$PR_TITLE"
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
