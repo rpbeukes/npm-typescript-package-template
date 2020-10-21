@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BRANCH_TO_MERGE: bump-packages-test # will become bump-packages
+      BOT_NAME: rpbeukes-bot
 
     steps:
       - name: Dump GitHub context
@@ -30,7 +31,7 @@ jobs:
       #       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
       - name: print github.actor
-        if: github.actor == 'rpbeukes-bot'
+        if: ${{github.actor == env.BOT_NAME}}
         run: |
           echo ${{github.actor}}
 
@@ -38,6 +39,11 @@ jobs:
         if: ${{github.head_ref == env.BRANCH_TO_MERGE}}
         run: |
           echo ${{github.head_ref}}
+
+      - name: print github.head_ref
+        if: ${{github.actor == env.BOT_NAME && github.head_ref == env.BRANCH_TO_MERGE}}
+        run: |
+          echo ${{github.actor}} ${{github.head_ref}}
 
       # - name: auto merge
       #   # Custom action for auto merging already available on marketplace
