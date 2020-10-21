@@ -52,6 +52,6 @@ jobs:
 
       - name: create PR 'bump all packages (rpbeukes-bot)'
         run: |
-          hub pull-request --base OWNER:$BRANCH_CHECKOUT_NAME -m "bump all packages (rpbeukes-bot)"
+          hub pull-request --base $BRANCH_CHECKOUT_NAME -m "bump all packages (rpbeukes-bot)"
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
