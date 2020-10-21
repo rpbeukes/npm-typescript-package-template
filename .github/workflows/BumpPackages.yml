@@ -11,6 +11,8 @@ jobs:
     env:
       BRANCH_NAME: bump-packages-test # will become bump-packages
       BRANCH_CHECKOUT_NAME: auto-merge-test # wil become master
+      PR_TITLE: bump all packages (rpbeukes-bot)
+      GIT_COMMIT_MESSAGE: bump package versions to latest.
 
     steps:
       # # share the variables with steps below
@@ -43,15 +45,15 @@ jobs:
           git config --local user.name "rpbeukes-bot"
 
       - name: add commit message
-        run: git commit -m "bump package versions to latest"
+        run: git commit -m "$GIT_COMMIT_MESSAGE"
 
-      - name: push branch
+      - name: push branch `$BRANCH_NAME`
         run: git push --set-upstream origin $BRANCH_NAME
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
 
       - name: create PR 'bump all packages (rpbeukes-bot)'
         run: |
-          hub pull-request --base $BRANCH_CHECKOUT_NAME -m "bump all packages (rpbeukes-bot)"
+          hub pull-request --base $BRANCH_CHECKOUT_NAME -m "$PR_TITLE"
         env:
           GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
