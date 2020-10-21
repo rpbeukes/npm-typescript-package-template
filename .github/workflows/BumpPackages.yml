@@ -22,9 +22,9 @@ jobs:
         run: sudo npm install -g npm-check-updates
 
       - uses: actions/checkout@v2
-        name: checkout $BRANCH_CHECKOUT_NAME
+        name: checkout branch to raise a PR against
         with:
-          ref: $BRANCH_CHECKOUT_NAME
+          ref: ${{ env.BRANCH_CHECKOUT_NAME }}
 
       - name: update packages with npm-check-updates
         run: ncu --doctor --upgrade
