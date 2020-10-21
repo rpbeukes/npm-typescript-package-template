@@ -37,7 +37,7 @@ jobs:
 
       - name: set IS_BUMP_NEEDED
         if: ${{contains(env.IS_BUMP_NEEDED, 'package.json')}}
-        run: echo "IS_BUMP_NEEDED=true >> $GITHUB_ENV
+        run: echo "IS_BUMP_NEEDED=true" >> $GITHUB_ENV
 
       - name: create and checkout bump branch
         if: ${{env.IS_BUMP_NEEDED == 'true'}}
