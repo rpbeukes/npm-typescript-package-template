@@ -37,10 +37,10 @@ jobs:
       - name: print github.head_ref
         if: github.head_ref == 'auto-bump-versions'
         run: |
-        echo `github.head_ref`
-        echo github.head_ref
-        echo $github.head_ref
-        echo ${{github.head_ref}}
+          echo `github.head_ref`
+          echo github.head_ref
+          echo $github.head_ref
+          echo ${{github.head_ref}}
 
       # - name: auto merge
       #   # Custom action for auto merging already available on marketplace
