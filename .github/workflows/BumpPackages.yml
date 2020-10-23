@@ -1,0 +1,75 @@
+name: bump-packages
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  create-bump-PR:
+    name: create-bump-PR
+    runs-on: ubuntu-latest
+    env:
+      BUMP_BRANCH_NAME: bump-packages # change this to `bump-packages-test` when debugging
+      MASTER_BRANCH_NAME: master # change this to `auto-merge-test` when debugging
+      GIT_COMMIT_MESSAGE: bump package versions to latest.
+      PR_TITLE: bump all packages (rpbeukes-bot)
+      IS_BUMP_NEEDED: false
+
+    steps:
+      # # share the variables with steps below
+      # - name: set BUMP_BRANCH_NAME environment variable
+      #   run: |
+      #     echo "BUMP_BRANCH_NAME=bump-packages" >> $GITHUB_ENV
+
+      - name: install npm-check-updates (ncu)
+        run: sudo npm install -g npm-check-updates
+
+      - uses: actions/checkout@v2
+        name: checkout branch to raise a PR against
+        with:
+          ref: ${{ env.MASTER_BRANCH_NAME }}
+
+      - name: update packages with npm-check-updates
+        run: ncu --doctor --upgrade
+
+      - name: git status
+        run: git status
+
+      - name: set IS_BUMP_NEEDED to output of 'git status | grep "package.json"'
+        run: echo "IS_BUMP_NEEDED=`git status | grep "package.json"`" >> $GITHUB_ENV
+
+      - name: set IS_BUMP_NEEDED=true
+        if: ${{contains(env.IS_BUMP_NEEDED, 'package.json')}}
+        run: echo "IS_BUMP_NEEDED=true" >> $GITHUB_ENV
+
+      - name: create and checkout bump branch
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
+        run: git branch $BUMP_BRANCH_NAME && git checkout $BUMP_BRANCH_NAME
+
+      - name: add package.json package-lock.json changes
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
+        run: |
+          git add package.json package-lock.json
+
+      - name: set bot as the git user
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
+        run: |
+          git config --local user.email "ruancoder+bot@gmail.com"
+          git config --local user.name "rpbeukes-bot"
+
+      - name: add commit message
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
+        run: git commit -m "$GIT_COMMIT_MESSAGE"
+
+      - name: push new bump branch upstream
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
+        run: git push --set-upstream origin $BUMP_BRANCH_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
+
+      - name: create PR with label 'automerge'
+        if: ${{env.IS_BUMP_NEEDED == 'true'}}
+        run: |
+          hub pull-request --base $MASTER_BRANCH_NAME --message "$PR_TITLE" --labels automerge
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
